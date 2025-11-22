@@ -1,0 +1,218 @@
+-- Modern Void.lua Loader with Fixed Update Log
+
+local function loadScript(gameName)
+    if gameName == "Assassin" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/zorluaa/Void1/refs/heads/main/15"))()
+    elseif gameName == "Murder VS Sheriff Duels" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/zorluaa/voidmvsd/refs/heads/main/mvsdvoid"))()
+    elseif gameName == "Arsenal" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/zorluaa/ArsenalVoid/refs/heads/main/VoidArsenal"))()
+    elseif gameName == "Counter Blox" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/zorluaa/CounterBLOXVOIDBETA/refs/heads/main/CBVOID", true))()
+    elseif gameName == "Prison Life" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/zorluaa/VoidLUAZORPRISONLIFE/refs/heads/main/NewPRISONLIFE"))()
+    else
+        warn("No script available for this game.")
+    end
+end
+
+-- UI Setup
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Parent = game.CoreGui
+ScreenGui.ResetOnSpawn = false
+
+local UICorner = Instance.new("UICorner")
+
+-- Main Container
+local MainContainer = Instance.new("Frame")
+MainContainer.Size = UDim2.new(0, 600, 0, 350)
+MainContainer.Position = UDim2.new(0.5, -300, 0.5, -175)
+MainContainer.BackgroundColor3 = Color3.fromRGB(28, 28, 30)
+MainContainer.BorderSizePixel = 0
+MainContainer.Parent = ScreenGui
+UICorner:Clone().Parent = MainContainer
+
+-- Header
+local Header = Instance.new("Frame")
+Header.Size = UDim2.new(1, 0, 0, 55)
+Header.BackgroundColor3 = Color3.fromRGB(35, 35, 38)
+Header.Parent = MainContainer
+UICorner:Clone().Parent = Header
+
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, -170, 1, 0)
+Title.Position = UDim2.new(0, 20, 0, 0)
+Title.BackgroundTransparency = 1
+Title.Text = "Void.lua Loader"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 28
+Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.Parent = Header
+
+-- Close Button
+local CloseButton = Instance.new("TextButton")
+CloseButton.Size = UDim2.new(0, 50, 0, 50)
+CloseButton.Position = UDim2.new(1, -55, 0, 2)
+CloseButton.Text = "✕"
+CloseButton.Font = Enum.Font.GothamBold
+CloseButton.TextSize = 24
+CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+CloseButton.Parent = Header
+UICorner:Clone().Parent = CloseButton
+CloseButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
+-- Update Log Button (left of CloseButton)
+local UpdateLogButton = Instance.new("TextButton")
+UpdateLogButton.Size = UDim2.new(0, 100, 0, 35)
+UpdateLogButton.Position = UDim2.new(1, -165, 0, 10)
+UpdateLogButton.Text = "Update Log"
+UpdateLogButton.Font = Enum.Font.Gotham
+UpdateLogButton.TextColor3 = Color3.fromRGB(255,255,255)
+UpdateLogButton.BackgroundColor3 = Color3.fromRGB(45,45,50)
+UpdateLogButton.Parent = Header
+UICorner:Clone().Parent = UpdateLogButton
+
+-- Update Log Panel (hidden initially, slides out from right)
+local UpdateLogFrame = Instance.new("Frame")
+UpdateLogFrame.Size = UDim2.new(0.3, 0, 1, 0)
+UpdateLogFrame.Position = UDim2.new(1, 0, 0, 0) -- start hidden outside the loader
+UpdateLogFrame.BackgroundColor3 = Color3.fromRGB(38,38,40)
+UpdateLogFrame.Visible = false
+UpdateLogFrame.Parent = MainContainer
+UICorner:Clone().Parent = UpdateLogFrame
+
+local UpdateLogLabel = Instance.new("TextLabel")
+UpdateLogLabel.Size = UDim2.new(1, -20, 1, -20)
+UpdateLogLabel.Position = UDim2.new(0,10,0,10)
+UpdateLogLabel.BackgroundTransparency = 1
+UpdateLogLabel.Text = "Update Log:\n\n• [+] Counter Blox [BETA]\n• [+] Prison Life [BETA]\n• Credits: Void Team\n• - Removed BGSI"
+UpdateLogLabel.TextColor3 = Color3.fromRGB(255,255,255)
+UpdateLogLabel.TextWrapped = true
+UpdateLogLabel.Font = Enum.Font.Gotham
+UpdateLogLabel.TextSize = 16
+UpdateLogLabel.TextXAlignment = Enum.TextXAlignment.Left
+UpdateLogLabel.TextYAlignment = Enum.TextYAlignment.Top
+UpdateLogLabel.Parent = UpdateLogFrame
+
+-- Update Log Toggle Logic
+local updateOpen = false
+UpdateLogButton.MouseButton1Click:Connect(function()
+    updateOpen = not updateOpen
+    if updateOpen then
+        UpdateLogFrame.Visible = true
+        UpdateLogFrame:TweenPosition(UDim2.new(1, -UpdateLogFrame.Size.X.Offset, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
+    else
+        UpdateLogFrame:TweenPosition(UDim2.new(1, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
+        task.wait(0.3)
+        UpdateLogFrame.Visible = false
+    end
+end)
+
+-- Dropdown
+local Dropdown = Instance.new("TextButton")
+Dropdown.Size = UDim2.new(0.8, 0, 0, 50)
+Dropdown.Position = UDim2.new(0.1, 0, 0.2, 0)
+Dropdown.Text = "Select Game"
+Dropdown.Font = Enum.Font.Gotham
+Dropdown.TextColor3 = Color3.fromRGB(255,255,255)
+Dropdown.TextSize = 20
+Dropdown.BackgroundColor3 = Color3.fromRGB(40,40,45)
+Dropdown.Parent = MainContainer
+UICorner:Clone().Parent = Dropdown
+
+-- Game Buttons
+local games = {
+    {name = "Assassin"},
+    {name = "Murder VS Sheriff Duels"},
+    {name = "Arsenal"},
+    {name = "Counter Blox"},
+    {name = "Prison Life"},
+}
+
+local buttons = {}
+for i, g in ipairs(games) do
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0.8, 0, 0, 40)
+    btn.Position = UDim2.new(0.1, 0, 0.35 + (i-1)*0.13, 0)
+    btn.Text = g.name
+    btn.Font = Enum.Font.Gotham
+    btn.TextColor3 = Color3.fromRGB(255,255,255)
+    btn.TextSize = 18
+    btn.BackgroundColor3 = Color3.fromRGB(50,50,55)
+    btn.AutoButtonColor = false
+    btn.Visible = false
+    UICorner:Clone().Parent = btn
+
+    btn.MouseEnter:Connect(function()
+        btn.BackgroundColor3 = Color3.fromRGB(75,75,80)
+    end)
+    btn.MouseLeave:Connect(function()
+        btn.BackgroundColor3 = Color3.fromRGB(50,50,55)
+    end)
+
+    btn.MouseButton1Click:Connect(function()
+        loadScript(g.name)
+        ScreenGui:Destroy()
+    end)
+
+    btn.Parent = MainContainer
+    buttons[i] = btn
+end
+
+-- Dropdown toggle animation
+Dropdown.MouseButton1Click:Connect(function()
+    for _, btn in pairs(buttons) do
+        btn.Visible = not btn.Visible
+        btn:TweenSize(UDim2.new(0.8, 0, btn.Visible and 0.1 or 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
+    end
+end)
+
+-- ============================
+-- WATERMARK (TOP RIGHT)
+-- ============================
+
+-- Prevent duplicates
+if game.CoreGui:FindFirstChild("Void_Watermark") then
+    game.CoreGui.Void_Watermark:Destroy()
+end
+
+-- ScreenGui
+local gui = Instance.new("ScreenGui")
+gui.Name = "Void_Watermark"
+gui.ResetOnSpawn = false
+gui.Parent = game.CoreGui
+
+-- Text Label
+local textLabel = Instance.new("TextLabel")
+textLabel.Parent = gui
+textLabel.BackgroundTransparency = 1
+textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+textLabel.TextStrokeTransparency = 0.5
+textLabel.Font = Enum.Font.Code
+textLabel.TextSize = 18
+textLabel.AnchorPoint = Vector2.new(1, 0)
+textLabel.Position = UDim2.new(1, -10, 0, 10)
+textLabel.Size = UDim2.new(0, 300, 0, 22)
+textLabel.TextXAlignment = Enum.TextXAlignment.Right
+
+-- Function to update watermark text
+local function updateWatermark()
+    local realTime = os.date("%H:%M:%S")
+    local realDate = os.date("%d/%m/%Y")
+    textLabel.Text = string.format("Void.lua [by zor]  |  %s  |  %s", realTime, realDate)
+end
+
+updateWatermark()
+
+-- Auto‑update every second
+task.spawn(function()
+    while gui.Parent do
+        updateWatermark()
+        task.wait(1)
+    end
+end)
+
